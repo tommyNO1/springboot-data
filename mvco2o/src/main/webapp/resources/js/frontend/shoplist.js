@@ -169,6 +169,7 @@ $(function() {
 					// 重置页码
 					pageNum = 1;
 					addItems(pageSize, pageNum);
+                    parentId = '';
 				}
 
 			});
