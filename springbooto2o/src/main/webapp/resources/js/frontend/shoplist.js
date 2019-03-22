@@ -5,13 +5,18 @@ $(function() {
 	// 一页返回的最大条数
 	var pageSize = 3;
 	// 获取店铺列表的URL
-	var listUrl = '/o2o/frontend/listshops';
+	var listUrl = '/myo2o/frontend/listshops';
 	// 获取店铺类别列表以及区域列表的URL
-	var searchDivUrl = '/o2o/frontend/listshopspageinfo';
+	var searchDivUrl = '/myo2o/frontend/listshopspageinfo';
 	// 页码
 	var pageNum = 1;
 	// 从地址栏URL里尝试获取parent shop category id.
 	var parentId = getQueryString('parentId');
+	// 是否选择了子类
+	var selectedParent = false;
+	if (parentId){
+		selectedParent = true;
+	}
 	var areaId = '';
 	var shopCategoryId = '';
 	var shopName = '';
@@ -91,8 +96,8 @@ $(function() {
 							+ '<div class="list-block media-list">' + '<ul>'
 							+ '<li class="item-content">'
 							+ '<div class="item-media">' + '<img src="'
-							+ getContextPath() + item.shopImg + '" width="44">'
-							+ '</div>' + '<div class="item-inner">'
+							+ item.shopImg + '" width="44">' + '</div>'
+							+ '<div class="item-inner">'
 							+ '<div class="item-subtitle">' + item.shopDesc
 							+ '</div>' + '</div>' + '</li>' + '</ul>'
 							+ '</div>' + '</div>' + '<div class="card-footer">'
@@ -132,7 +137,7 @@ $(function() {
 	// 点击店铺的卡片进入该店铺的详情页
 	$('.shop-list').on('click', '.card', function(e) {
 		var shopId = e.currentTarget.dataset.shopId;
-		window.location.href = '/o2o/frontend/shopdetail?shopId=' + shopId;
+		window.location.href = '/myo2o/frontend/shopdetail?shopId=' + shopId;
 	});
 
 	// 选择新的店铺类别之后，重置页码，清空原先的店铺列表，按照新的类别去查询
@@ -140,7 +145,7 @@ $(function() {
 			'click',
 			'.button',
 			function(e) {
-				if (parentId) {// 如果传递过来的是一个父类下的子类
+				if (parentId && selectedParent) {// 如果传递过来的是一个父类下的子类
 					shopCategoryId = e.target.dataset.categoryId;
 					// 若之前已选定了别的category,则移除其选定效果，改成选定新的
 					if ($(e.target).hasClass('button-fill')) {
