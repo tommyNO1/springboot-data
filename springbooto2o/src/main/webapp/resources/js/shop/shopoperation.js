@@ -126,7 +126,7 @@ $(function() {
 						window.location.href = "/o2o/shopadmin/shoplist";
 					}
 				} else {
-					$.toast('提交失败！' + data.errMsg);
+					alert('提交失败！' + data.errMsg);
 				}
 				// 点击验证码图片的时候，注册码会改变
 				$('#captcha_img').click();

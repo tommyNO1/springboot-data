@@ -3,6 +3,8 @@ package com.imooc.o2o.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +28,7 @@ public class ShopServiceImpl implements ShopService {
 	private ShopDao shopDao;
 	@Autowired
 	private ShopAuthMapDao shopAuthMapDao;
+	private final static Logger LOG = LoggerFactory.getLogger(ShopServiceImpl.class);
 
 	@Override
 	public ShopExecution getShopList(Shop shopCondition, int pageIndex, int pageSize) {
@@ -96,6 +99,7 @@ public class ShopServiceImpl implements ShopService {
 			// 添加店铺信息
 			int effectedNum = shopDao.insertShop(shop);
 			if (effectedNum <= 0) {
+				LOG.error("插入店铺信息的时候，返回了0条变更");
 				throw new ShopOperationException("店铺创建失败");
 			} else {
 				if (thumbnail.getImage() != null) {
@@ -103,12 +107,14 @@ public class ShopServiceImpl implements ShopService {
 					try {
 						addShopImg(shop, thumbnail);
 					} catch (Exception e) {
-						throw new ShopOperationException("addShopImg error:" + e.getMessage());
+						LOG.error("addShopImg error:" + e.getMessage());
+						throw new ShopOperationException("添加店铺图片失败");
 					}
 					// 更新店铺的图片地址
 					effectedNum = shopDao.updateShop(shop);
 					if (effectedNum <= 0) {
-						throw new ShopOperationException("更新图片地址失败");
+						LOG.error("更新图片地址失败");
+						throw new ShopOperationException("添加店铺图片失败");
 					}
 					// 执行增加shopAuthMap操作
 					ShopAuthMap shopAuthMap = new ShopAuthMap();
@@ -122,15 +128,18 @@ public class ShopServiceImpl implements ShopService {
 					try {
 						effectedNum = shopAuthMapDao.insertShopAuthMap(shopAuthMap);
 						if (effectedNum <= 0) {
+							LOG.error("addShop:授权创建失败");
 							throw new ShopOperationException("授权创建失败");
 						} 
 					} catch (Exception e) {
-						throw new ShopOperationException("insertShopAuthMap error: " + e.getMessage());
+						LOG.error("insertShopAuthMap error: " + e.getMessage());
+						throw new ShopOperationException("授权创建失败");
 					}
 				}
 			}
 		} catch (Exception e) {
-			throw new ShopOperationException("addShop error:" + e.getMessage());
+			LOG.error("addShop error:" + e.getMessage());
+			throw new ShopOperationException("创建店铺失败，请联系相关管理员");
 		}
 		return new ShopExecution(ShopStateEnum.CHECK, shop);
 	}

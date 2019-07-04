@@ -131,7 +131,7 @@ public class ShopManagementController {
 
 	@RequestMapping(value = "/registershop", method = RequestMethod.POST)
 	@ResponseBody
-	private Map<String, Object> registerShop(HttpServletRequest request) {
+	private Map<String, Object> registerShop(HttpServletRequest request) throws IOException {
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		if (!CodeUtil.checkVerifyCode(request)) {
 			modelMap.put("success", false);
@@ -165,29 +165,21 @@ public class ShopManagementController {
 			PersonInfo owner = (PersonInfo) request.getSession().getAttribute("user");
 			shop.setOwner(owner);
 			ShopExecution se;
-			try {
-				ImageHolder imageHolder = new ImageHolder(shopImg.getOriginalFilename(), shopImg.getInputStream());
-				se = shopService.addShop(shop, imageHolder);
-				if (se.getState() == ShopStateEnum.CHECK.getState()) {
-					modelMap.put("success", true);
-					// 该用户可以操作的店铺列表
-					@SuppressWarnings("unchecked")
-					List<Shop> shopList = (List<Shop>) request.getSession().getAttribute("shopList");
-					if (shopList == null || shopList.size() == 0) {
-						shopList = new ArrayList<Shop>();
-					}
-					shopList.add(se.getShop());
-					request.getSession().setAttribute("shopList", shopList);
-				} else {
-					modelMap.put("success", false);
-					modelMap.put("errMsg", se.getStateInfo());
+			ImageHolder imageHolder = new ImageHolder(shopImg.getOriginalFilename(), shopImg.getInputStream());
+			se = shopService.addShop(shop, imageHolder);
+			if (se.getState() == ShopStateEnum.CHECK.getState()) {
+				modelMap.put("success", true);
+				// 该用户可以操作的店铺列表
+				@SuppressWarnings("unchecked")
+				List<Shop> shopList = (List<Shop>) request.getSession().getAttribute("shopList");
+				if (shopList == null || shopList.size() == 0) {
+					shopList = new ArrayList<Shop>();
 				}
-			} catch (ShopOperationException e) {
+				shopList.add(se.getShop());
+				request.getSession().setAttribute("shopList", shopList);
+			} else {
 				modelMap.put("success", false);
-				modelMap.put("errMsg", e.getMessage());
-			} catch (IOException e) {
-				modelMap.put("success", false);
-				modelMap.put("errMsg", e.getMessage());
+				modelMap.put("errMsg", se.getStateInfo());
 			}
 			return modelMap;
 		} else {
