@@ -150,6 +150,7 @@ CREATE TABLE `tb_product` (
   `normal_price` varchar(100) DEFAULT NULL,
   `promotion_price` varchar(100) DEFAULT NULL,
   `priority` int(2) NOT NULL DEFAULT '0',
+  `point` int(10) NOT NULL DEFAULT '0',
   `create_time` datetime DEFAULT NULL,
   `last_edit_time` datetime DEFAULT NULL,
   `enable_status` int(2) NOT NULL DEFAULT '0',
