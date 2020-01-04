@@ -74,13 +74,11 @@ public class ShortNetAddressUtil {
          *
          * @param longUrl
          *            长网址：即原网址
-         *        termOfValidity
-         *            有效期：默认值为long-term
          * @return  成功：短网址
          *          失败：返回空字符串
          */
-        public static String createShortUrl(String longUrl, String termOfValidity) {
-            String params = "{\"Url\":\""+ longUrl + "\",\"TermOfValidity\":\""+ termOfValidity + "\"}";
+        public static String getShortURL(String longUrl) {
+            String params = "{\"Url\":\""+ longUrl + "\",\"TermOfValidity\":\""+ "long-term" + "\"}";
     
             BufferedReader reader = null;
             try {
@@ -128,7 +126,7 @@ public class ShortNetAddressUtil {
         }
     
 	    public static void main(String[] args) {
-	        String res = createShortUrl("http://myo2o.yitiaojieinfo.com/myo2o/frontend/index","1-year");
+	        String res = getShortURL("http://myo2o.yitiaojieinfo.com/myo2o/frontend/index");
 	        System.out.println(res);
 	    }
 }
