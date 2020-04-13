@@ -114,6 +114,7 @@ $(function() {
 				if (total >= maxItems) {
 					// 隐藏提示符
 					$('.infinite-scroll-preloader').hide();
+                    return;
 				} else {
 					$('.infinite-scroll-preloader').show();
 				}
