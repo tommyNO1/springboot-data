@@ -90,8 +90,16 @@ function ajaxTable() {
 			}).datagrid('acceptChanges');
 }
 function imgFormater(value, row, index) {
-	var shopCategoryImg = row.shopCategoryImg;
+	var shopCategoryImg =getContextPath()+ row.shopCategoryImg;
 	return '<img src="' + shopCategoryImg + '" width="100px" height="60px">';
+}
+function createTimeFormater(value, row, index) {
+	var createTime = row.createTime;
+	return new Date(createTime).Format("yyyy-MM-dd");
+}
+function lastEditTimeFormater(value, row, index) {
+	var lastEditTime = row.lastEditTime;
+	return new Date(lastEditTime).Format("yyyy-MM-dd");
 }
 /**
  * 设置操作列的信息 参数说明 value 这个可以不管，但是要使用后面 row 和index 这个参数是必须的 row 当前行的数据 index
@@ -101,7 +109,10 @@ function optFormater(value, row, index) {
 	var shopCategoryId = row.shopCategoryId;
 	var shopCategoryName = row.shopCategoryName;
 	var shopCategoryDesc = row.shopCategoryDesc;
-	var parentId = row.parent.shopCategoryId;
+	var parentId = null;
+	if(row.parent != undefined){
+		var parentId = row.parent.shopCategoryId;
+	}
 	var priority = row.priority;
 	var params = shopCategoryId + ",'" + shopCategoryName + "','"
 			+ shopCategoryDesc + "'," + parentId + "," + priority;

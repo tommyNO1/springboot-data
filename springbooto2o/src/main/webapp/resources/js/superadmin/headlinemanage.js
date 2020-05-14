@@ -89,8 +89,16 @@ function changeFilterStatus(status) {
 }
 
 function imgFormater(value, row, index) {
-	var lineImg = row.lineImg;
+	var lineImg = getContextPath() + row.lineImg;
 	return '<img src="' + lineImg + '" width="100px" height="60px">';
+}
+function createTimeFormater(value, row, index) {
+	var createTime = row.createTime;
+	return new Date(createTime).Format("yyyy-MM-dd");
+}
+function lastEditTimeFormater(value, row, index) {
+	var lastEditTime = row.lastEditTime;
+	return new Date(lastEditTime).Format("yyyy-MM-dd");
 }
 /**
  * 设置操作列的信息 参数说明 value 这个可以不管，但是要使用后面 row 和index 这个参数是必须的 row 当前行的数据 index

@@ -57,5 +57,18 @@
 			<bean id="ShopPermissionInterceptor"
 				class="com.imooc.o2o.interceptor.shopadmin.ShopPermissionInterceptor" />
 		</mvc:interceptor>
+		<!-- 超级管理员系统拦截部分 -->
+		<mvc:interceptor>
+			<mvc:mapping path="/superadmin/**" />
+			<mvc:exclude-mapping path="/superadmin/login" />
+			<mvc:exclude-mapping path="/superadmin/logincheck" />
+			<mvc:exclude-mapping path="/superadmin/main" />
+			<mvc:exclude-mapping path="/superadmin/top" />
+			<mvc:exclude-mapping path="/superadmin/clearcache4area" />
+			<mvc:exclude-mapping path="/superadmin/clearcache4headline" />
+			<mvc:exclude-mapping path="/superadmin/clearcache4shopcategory" />
+			<bean id="SuperAdminLoginInterceptor"
+				class="com.imooc.o2o.interceptor.superadmin.SuperAdminLoginInterceptor" />
+		</mvc:interceptor>
 	</mvc:interceptors>
 </beans>
